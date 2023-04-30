@@ -15,26 +15,27 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 
+import domain.portsin.DatosConcurso;
 import domain.portsin.DomainException;
 import domain.portsin.GestorConcurso;
 
 public class UI extends JFrame {
 
-	private JPanel            contentPane;
-	private JLabel            lblName;
-	private JTextField        txtName;
-	private JLabel            lblLastName;
-	private JTextField        txtLastName;
-	private JLabel            lblId;
-	private JTextField        txtId;
-	private JLabel            lblPhone;
-	private JTextField        txtPhone;
-	private JLabel            lblEmail;
-	private JTextField        txtEmail;
-	private JComboBox<String> comboBox;
-	private JButton           btnOk;
-	private JLabel            lblCompetition;
-	private GestorConcurso    concursos;
+	private JPanel           contentPane;
+	private JLabel           lblName;
+	private JTextField       txtName;
+	private JLabel           lblLastName;
+	private JTextField       txtLastName;
+	private JLabel           lblId;
+	private JTextField       txtId;
+	private JLabel           lblPhone;
+	private JTextField       txtPhone;
+	private JLabel           lblEmail;
+	private JTextField       txtEmail;
+	private JComboBox<DatosConcurso> comboBox;
+	private JButton          btnOk;
+	private JLabel           lblCompetition;
+	private GestorConcurso   concursos;
 
 	public UI(GestorConcurso concursos) {
 		var frame = new JFrame("Inscription to Competition");
@@ -79,20 +80,33 @@ public class UI extends JFrame {
 			}
 		});
 		lblCompetition = new JLabel("Concurso:");
-		comboBox       = new JComboBox<String>();
+		comboBox       = new JComboBox<DatosConcurso>();
 		todosLosConcursos();
 	}
 
-	private void todosLosConcursos() {
-		for (String nombre : concursos.listaConcursos()) {
+	private void todosLosConcursos() { // nombre va a ser un arreglo [id,nombre];
+		/*
+		 * for (String[] nombre : concursos.listaConcursos()) {
+		 * comboBox.addItem(nombre); }
+		 * 
+		 */
+
+		for (DatosConcurso nombre : concursos.lista()) {
 			comboBox.addItem(nombre);
+
 		}
 	}
 
 	private void saveInscription() {
 
-		concursos.cargarParticipante(txtName.getText(), txtLastName.getText(), txtPhone.getText(), txtId.getText(),
-				txtEmail.getText(), comboBox.getName());
+		String nombre   = txtName.getText();
+		String apellido = txtLastName.getText();
+		String email    = txtEmail.getText();
+		String tel      = txtPhone.getText();
+		String dni      = txtId.getText();
+		DatosConcurso  concurso = (DatosConcurso) comboBox.getSelectedItem(); // ¿Es correcto?
+
+		concursos.cargarParticipante(nombre, apellido, tel, dni, email, concurso.id());
 
 		JOptionPane.showMessageDialog(this.contentPane, "Incripcion finalizada");
 

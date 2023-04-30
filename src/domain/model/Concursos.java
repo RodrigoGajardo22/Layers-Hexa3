@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import domain.portsin.DatosConcurso;
 import domain.portsin.GestorConcurso;
 import domain.portsout.PersistenciaConcursos;
 import domain.portsout.PersistenciaParticipantes;
@@ -19,10 +20,24 @@ public class Concursos implements GestorConcurso {
 
 	}
 
-	public List<String> listaConcursos() {
-		List<String> listaConcurso = new ArrayList<>();
+	public List<DatosConcurso> lista() {
+		List<DatosConcurso> listaConcurso = new ArrayList<>();
+
 		for (Concurso concurso : todosLosConcursos()) {
-			listaConcurso.add(concurso.nombre());
+			listaConcurso.add(new DatosConcurso(concurso.nombre(), "" + concurso.id()));
+		}
+		return listaConcurso;
+
+	}
+
+	public List<String[]> listaConcursos() {
+		List<String[]> listaConcurso = new ArrayList<>();
+
+		for (Concurso concurso : todosLosConcursos()) {
+
+			String[] datos = { concurso.nombre(), "" + concurso.id() };
+			listaConcurso.add(datos);
+
 		}
 
 		return listaConcurso;
@@ -67,11 +82,10 @@ public class Concursos implements GestorConcurso {
 		return 0;
 	}
 
-	@Override
-	public boolean cargarParticipante(String nombre, String apellido, String tel, String dni, String email,
-			String nombreConcurso) {
+	@Override // recibe el id
+	public boolean cargarParticipante(String nombre, String apellido, String tel, String dni, String email, String id) {
 
-		String       id           = "" + buscarIDConcurso(nombreConcurso);
+		// String id = "" + buscarIDConcurso(nombreConcurso);
 
 		Participante participante = new Participante(nombre, apellido, tel, email, dni, id);
 		return participantes.registrar(participante.datos());
